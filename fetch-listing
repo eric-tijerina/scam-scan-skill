@@ -1,0 +1,17 @@
+#!/bin/bash
+# fetch-listing <url> — pull a listing/announcement page as plain text for scam-scan analysis.
+# Usage: bin/fetch-listing "https://superteam.fun/earn/listing/..."
+set -euo pipefail
+URL="${1:?usage: fetch-listing <url>}"
+curl -sL --max-time 25 -A "Mozilla/5.0 (compatible; scam-scan/1.0)" "$URL" \
+  | python3 -c "
+import sys, html, re
+raw = sys.stdin.read()
+# drop scripts/styles
+raw = re.sub(r'<script.*?</script>', ' ', raw, flags=re.S|re.I)
+raw = re.sub(r'<style.*?</style>', ' ', raw, flags=re.S|re.I)
+text = re.sub(r'<[^>]+>', ' ', raw)
+text = html.unescape(text)
+text = re.sub(r'\s+', ' ', text).strip()
+print(text[:12000])
+"
