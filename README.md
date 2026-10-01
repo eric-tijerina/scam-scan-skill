@@ -16,6 +16,7 @@ directory, e.g.:
 
 ```bash
 git clone https://github.com/eric-tijerina/scam-scan-skill.git
+chmod +x scam-scan-skill/bin/fetch-listing   # web upload can't set the exec bit
 cp -r scam-scan-skill ~/.config/agent/skills/scam-scan   # path depends on your agent
 ```
 
